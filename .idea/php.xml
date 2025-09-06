@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="MessDetectorOptionsConfiguration">
+    <option name="transferred" value="true" />
+  </component>
+  <component name="PHPCSFixerOptionsConfiguration">
+    <option name="transferred" value="true" />
+  </component>
+  <component name="PHPCodeSnifferOptionsConfiguration">
+    <option name="highlightLevel" value="WARNING" />
+    <option name="transferred" value="true" />
+  </component>
+  <component name="PhpIncludePathManager">
+    <include_path>
+      <path value="$PROJECT_DIR$/vendor/composer" />
+      <path value="$PROJECT_DIR$/vendor/nette/utils" />
+      <path value="$PROJECT_DIR$/projetoNette/vendor/phpstan/phpstan" />
+      <path value="$PROJECT_DIR$/projetoNette/vendor/tracy/tracy" />
+      <path value="$PROJECT_DIR$/projetoNette/vendor/nette/forms" />
+      <path value="$PROJECT_DIR$/projetoNette/vendor/nette/database" />
+      <path value="$PROJECT_DIR$/projetoNette/vendor/nette/component-model" />
+      <path value="$PROJECT_DIR$/projetoNette/vendor/composer" />
+      <path value="$PROJECT_DIR$/projetoNette/vendor/nette/mail" />
+      <path value="$PROJECT_DIR$/projetoNette/vendor/nette/di" />
+      <path value="$PROJECT_DIR$/projetoNette/vendor/nette/routing" />
+      <path value="$PROJECT_DIR$/projetoNette/vendor/nette/bootstrap" />
+      <path value="$PROJECT_DIR$/projetoNette/vendor/nette/neon" />
+      <path value="$PROJECT_DIR$/projetoNette/vendor/nette/caching" />
+      <path value="$PROJECT_DIR$/projetoNette/vendor/symfony/thanks" />
+      <path value="$PROJECT_DIR$/projetoNette/vendor/nette/schema" />
+      <path value="$PROJECT_DIR$/projetoNette/vendor/nette/security" />
+      <path value="$PROJECT_DIR$/projetoNette/vendor/nette/php-generator" />
+      <path value="$PROJECT_DIR$/projetoNette/vendor/nette/tester" />
+      <path value="$PROJECT_DIR$/projetoNette/vendor/nette/utils" />
+      <path value="$PROJECT_DIR$/projetoNette/vendor/nette/assets" />
+      <path value="$PROJECT_DIR$/projetoNette/vendor/nette/application" />
+      <path value="$PROJECT_DIR$/projetoNette/vendor/nette/http" />
+      <path value="$PROJECT_DIR$/projetoNette/vendor/nette/robot-loader" />
+      <path value="$PROJECT_DIR$/projetoNette/vendor/latte/latte" />
+      <path value="$PROJECT_DIR$/projetoNette/vendor/phpstan/phpstan-nette" />
+    </include_path>
+  </component>
+  <component name="PhpProjectSharedConfiguration" php_language_level="8.1">
+    <option name="suggestChangeDefaultLanguageLevel" value="false" />
+  </component>
+  <component name="PhpStanOptionsConfiguration">
+    <option name="transferred" value="true" />
+  </component>
+  <component name="PsalmOptionsConfiguration">
+    <option name="transferred" value="true" />
+  </component>
+</project>
