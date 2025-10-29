@@ -35,9 +35,9 @@ return array (
   ),
   1 => 
   array (
-    'null' => 1,
-    'App\\Presentation\\Home\\HomeDefaultTemplate' => 2,
-    'App\\Presentation\\Home\\HomeTemplate' => 2,
+    'null' => 2,
+    'App\\Presentation\\Home\\HomeDefaultTemplate' => 3,
+    'App\\Presentation\\Home\\HomeTemplate' => 3,
   ),
   2 => 
   array (

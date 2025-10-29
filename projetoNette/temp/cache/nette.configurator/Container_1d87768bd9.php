@@ -231,7 +231,12 @@ class Container_1d87768bd9 extends Nette\DI\Container
 
 	public function createServiceDatabase__default__connection(): Nette\Database\Connection
 	{
-		$service = new Nette\Database\Connection('sqlite::memory:', null, null, []);
+		$service = new Nette\Database\Connection(
+			'mysql:host=localhost;port=3306;dbname=bd_netteblog',
+			/*sensitive{*/'root'/*}*/,
+			/*sensitive{*/'root'/*}*/,
+			[],
+		);
 		Nette\Bridges\DatabaseTracy\ConnectionPanel::initialize(
 			$service,
 			true,
