@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Model\Modelautor;
+
 use Nette;
 
 final class Modelautor
@@ -19,7 +20,6 @@ final class Modelautor
 
     public function listarAutores(): Nette\Database\Table\Selection
     {
-
         // select * from autores
         return $this->database->table(self::NOME_TABELA);
     }
@@ -44,4 +44,5 @@ final class Modelautor
     {
         $this->buscarAutor($id)->delete();
     }
+
 }
