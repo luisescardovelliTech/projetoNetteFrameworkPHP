@@ -2,71 +2,99 @@
 
 namespace App\Autor;
 
-use App\Model\Modelautor\Modelautor;
 use Nette;
 
-use Nette\Application\UI\Form;
+use App\Model\Modelautor\Modelautor;
+use App\Core\ApiPresenter;
+use Nette\Application\BadRequestException;
 
-final class AutorPresenter extends Nette\Application\UI\Presenter
+final class AutorPresenter extends ApiPresenter
 {
-    public function __construct(private Modelautor $modelo) //Nette injeta o modelAutor feito
+    public function __construct(private Modelautor $modelo)
     {
         parent::__construct();
     }
 
-
-    public function renderDefault(): void //pagina padrao
+    public function acaoPadrao(?int $id = null): void
     {
-        $this->template->autores = $this->modelo->listarAutores();
-    }
+        $metodoHttp = $this->getHttpRequest()->getMethod();
 
-    public function renderEditar(?int $id = null): void
-    {
         if ($id) {
-            $autor = $this->modelo->buscarAutor($id);
-            if (!$autor) {
-                $this->error('Autor não encontrado');
+            switch ($metodoHttp) {
+                case 'GET':
+                    $this->buscarUm($id);
+                    break;
+                case 'PUT':
+                    $this->atualizaAutor($id);
+                    break;
+                case 'DELETE':
+                    $this->deletaAutor($id);
+                default:
+                    $this->sendJson(['erro' => 'Método não permitido'], 405);
             }
-            $this['formAutor']->setDefaults($autor);
-            $this->template->nomeAutor = $autor->nome;
         } else {
-            $this->template->nomeAutor = 'Novo Autor';
+            switch ($metodoHttp) {
+                case 'GET':
+                    $this->listarTodos();
+                    break;
+                case 'POST':
+                    $this->criarAutor();
+                default:
+                    $this->sendJson(['erro' => 'Método não permitido'], 405);
+            }
+        }
+
+    }
+
+    private function listarTodos()
+    {
+        $this->sendJson($this->modelo->listarAutores()->fetchAll());
+    }
+
+    private function buscarUm(int $id): void
+    {
+        $autor = $this->modelo->buscarAutor($id);
+        if ($autor){
+            $this->sendJson($autor);
+        } else{
+            $this->sendJson(['erro' => 'Autor não encontrado'], 404);
         }
     }
 
-    public function DeletarAutor(int $id): void // funçao para deletar o autor
+    private function criarAutor(): void
     {
-        try {
-            $this->modelo->deletaAutor($id);
-            $this->flashMessage('Autor deletado com sucesso', 'success');
-        } catch (\Exception $e) {
-            $this->flashMessage('Erro ao deletar autor.', 'danger');
+        $dados = $this->getJsonBody();
+
+        if(empty($dados['nome']) || empty($dados['email'])){
+            throw new BadRequestException('Campos "nome" e "email" são obrigatórios.', 400);
         }
-        $this->redirect('default');
+
+        $novoAutor = $this->modelo->criarAutor($dados);
+        $this->sendJson($novoAutor, 201); // 201 criado
     }
 
-    protected function criarFormularioAutor(): Form // formulario do autor
+    private function atualizaAutor(int $id): void
     {
-        $formulario = new Form;
-        $formulario->addText('nome', 'Nome: ')->setRequired();
-        $formulario->addEmail('email', 'E-mail: ')->setRequired();
-        $formulario->addText('celular', 'Celular: ');
-        $formulario->addSubmit('send', 'Salvar');
-        $formulario->onSuccess[] = [$this, 'formAutorSucesso'];
-        return $formulario;
-    }
-
-    public function formAutorSucesso(Form $form, array $valores): void //funçao é chamada quando o formulario é salvo com sucesso
-    {
-        $id = $this->getParameter('id');
-
-        if ($id) {
-            $this->modelo->autualizaAutor($id, $valores);
-            $this->flashMessage('Atuor atualizado.', 'success');
-        } else {
-            $this->modelo->criarAutor($valores);
-            $this->flashMessage('Autor criado.', 'success');
+        if(!$this->modelo->buscarAutor($id)){
+            $this->sendJson(['erro' =>'Autor não encontrado'], 404);
+            return;
         }
-        $this->redirect('default');
+
+        $dados =$this->getJsonBody();
+        $this->modelo->atualizaAutor($id, $dados);
+        $this->sendJson($this->modelo->buscarAutor($id));
+
     }
+
+    private function deletaAutor(int $id): void
+    {
+        if (!$this->modelo->buscarAutor($id)){
+            $this->sendJson(['erro' => 'Autor não encontrado'], 404);
+            return;
+        }
+
+        $this->modelo->deletaAutor($id);
+        $this->sendJson(null, 204);
+    }
+
 }
