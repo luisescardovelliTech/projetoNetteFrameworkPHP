@@ -22,7 +22,7 @@ final class AutorPresenter extends ApiPresenter
         if ($id) {
             switch ($metodoHttp) {
                 case 'GET':
-                    $this->buscarUm($id);
+                    $this->buscarAutor($id);
                     break;
                 case 'PUT':
                     $this->atualizaAutor($id);
@@ -38,7 +38,7 @@ final class AutorPresenter extends ApiPresenter
                     $this->listarTodos();
                     break;
                 case 'POST':
-                    $this->criarAutor();
+                    $this->criaAutor();
                 default:
                     $this->sendJson(['erro' => 'Método não permitido'], 405);
             }
@@ -51,7 +51,7 @@ final class AutorPresenter extends ApiPresenter
         $this->sendJson($this->modelo->listarAutores()->fetchAll());
     }
 
-    private function buscarUm(int $id): void
+    private function buscarAutor(int $id): void
     {
         $autor = $this->modelo->buscarAutor($id);
         if ($autor){
@@ -61,7 +61,7 @@ final class AutorPresenter extends ApiPresenter
         }
     }
 
-    private function criarAutor(): void
+    private function criaAutor(): void
     {
         $dados = $this->getJsonBody();
 
@@ -69,7 +69,7 @@ final class AutorPresenter extends ApiPresenter
             throw new BadRequestException('Campos "nome" e "email" são obrigatórios.', 400);
         }
 
-        $novoAutor = $this->modelo->criarAutor($dados);
+        $novoAutor = $this->modelo->criaAutor($dados);
         $this->sendJson($novoAutor, 201); // 201 criado
     }
 
