@@ -1,5 +1,9 @@
 services:
 	- App\Core\RouterFactory::createRouter
+    - App\Model\Modelautor
+    - App\Model\Modelcategoria
+    - App\Model\Modelposts
+    - App\Model\Modelotags
 
 
 search:

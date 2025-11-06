@@ -7,12 +7,22 @@ namespace App\Core;
 use Nette;
 use Nette\Application\BadRequestException;
 use Nette\Application\Responses\JsonResponse;
-    
+
 abstract class ApiPresenter extends Nette\Application\UI\Presenter
 {
-
     public function run(Nette\Application\Request $request): Nette\Application\Response
     {
+        $httpResponse = $this->getHttpResponse();
+
+        $httpResponse->setHeader('Access-Control-Allow-Origin', '*');
+
+        $httpResponse->setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+
+        $httpResponse->setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+        if ($this->getHttpRequest()->isMethod('OPTIONS')) {
+            $this->sendJson(null, 204); // Responde 204 (No Content) e termina
+        }
         try {
             return parent::run($request);
 
