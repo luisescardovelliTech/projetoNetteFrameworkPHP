@@ -14,33 +14,32 @@ abstract class ApiPresenter extends Nette\Application\UI\Presenter
     {
         $httpResponse = $this->getHttpResponse();
 
-        $httpResponse->setHeader('Access-Control-Allow-Origin', '*');
+        $httpResponse->setHeader('Access-Control-Allow-Origin', 'http://localhost:8000');
 
         $httpResponse->setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
 
         $httpResponse->setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
+        $httpResponse->setHeader('Access-Control-Allow-Credentials', 'true');
+
         if ($this->getHttpRequest()->isMethod('OPTIONS')) {
-            $this->sendJson(null, 204); // Responde 204 (No Content) e termina
+            // envia uma resposta 204 (No Content) e termina a execução
+            $this->sendJson(null, 204);
         }
         try {
             return parent::run($request);
-
         } catch (BadRequestException $e) {
             // 400 - Erro do cliente
             $this->getHttpResponse()->setCode($e->getCode());
             return new JsonResponse(['erro' => $e->getMessage()]);
-
         } catch (Nette\Database\ForeignKeyConstraintViolationException $e) {
             // 409 - Conflito
             $this->getHttpResponse()->setCode(409);
             return new JsonResponse(['erro' => 'Conflito de dependência. O recurso está em uso.']);
-
         } catch (Nette\Database\UniqueConstraintViolationException $e) {
             // 409 - Conflito
             $this->getHttpResponse()->setCode(409);
             return new JsonResponse(['erro' => 'Conflito de dados. O recurso já existe.']);
-
         } catch (\Exception $e) {
 
             $this->getHttpResponse()->setCode(500);
