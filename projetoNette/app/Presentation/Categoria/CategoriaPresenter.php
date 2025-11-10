@@ -14,7 +14,7 @@ final class CategoriaPresenter extends ApiPresenter
         parent::__construct();
     }
 
-    public function acaoPadrao(?int $id = null): void
+    public function actionDefault(?int $id = null): void
     {
         $metodoHttp = $this->getHttpRequest()->getMethod();
 
@@ -47,14 +47,21 @@ final class CategoriaPresenter extends ApiPresenter
 
     private function listarTodas(): void
     {
-        $this->sendJson($this->modelo->listarCategorias()->fetchAll());
+        $categoriaDb = $this->modelo->listarCategorias()->fetchAll();
+
+        $resultado = [];
+
+        foreach ($categoriaDb as $categoria) {
+            $resultado[] = $categoria->toArray();
+        }
+        $this->sendJson($resultado);
     }
 
     private function buscarCategoria(int $id): void
     {
         $categoria = $this->modelo->buscarCategoria($id);
         if ($categoria) {
-            $this->sendJson($categoria);
+            $this->sendJson($categoria->toArray());
         } else {
             $this->sendJson(['erro' => 'Categoria não encontrada'], 404);
         }
@@ -69,15 +76,26 @@ final class CategoriaPresenter extends ApiPresenter
         }
 
         $novaCategoria = $this->modelo->criaCategoria($dados);
-        $this->sendJson($novaCategoria, 201);
+        $this->sendJson($novaCategoria->toArray(), 201);
+    }
+
+     private function atualizaCategoria(int $id): void
+    {
+        if (!$this->modelo->buscarCategoria($id)) {
+            $this->sendJson(['erro' => 'Categoria não encontrada'], 404);
+            return;
+        }
+        $dados = $this->getJsonBody();
+        $this->modelo->atualizaCategoria($id, $dados);
+        $this->sendJson($this->modelo->buscarCategoria($id)->toArray());
     }
 
     private function deletaCategoria(int $id): void
     {
         if (!$this->modelo->buscarCategoria($id)) {
             $this->sendJson(['erro' => 'Categoria não encontrada.'], 404);
+            return;
         }
-        return;
 
         $this->modelo->deletaCategoria($id);
         $this->sendJson(null, 204);
