@@ -35,7 +35,7 @@ return array (
     'App\\Model\\Modeltags' => 
     array (
       0 => 'C:\\xampp\\htdocs\\projetoNette\\projetoNette\\app\\Model\\Modeltags.php',
-      1 => 1762479512,
+      1 => 1762738496,
     ),
     'App\\Presentation\\Accessory\\LatteExtension' => 
     array (
@@ -50,7 +50,7 @@ return array (
     'App\\Presentation\\Categoria\\CategoriaPresenter' => 
     array (
       0 => 'C:\\xampp\\htdocs\\projetoNette\\projetoNette\\app\\Presentation\\Categoria\\CategoriaPresenter.php',
-      1 => 1762737611,
+      1 => 1762737851,
     ),
     'App\\Presentation\\Error\\Error4xx\\Error4xxPresenter' => 
     array (
@@ -75,12 +75,13 @@ return array (
     'App\\Presentation\\Tags\\TagsPresenter' => 
     array (
       0 => 'C:\\xampp\\htdocs\\projetoNette\\projetoNette\\app\\Presentation\\Tags\\TagsPresenter.php',
-      1 => 1762733189,
+      1 => 1762738511,
     ),
   ),
   1 => 
   array (
-    'null' => 1,
+    'null' => 3,
+    'App\\Presentation\\Tag\\TagPresenter' => 2,
   ),
   2 => 
   array (

@@ -9,12 +9,12 @@ use Nette\Application\BadRequestException;
 
 final class TagsPresenter extends ApiPresenter
 {
-    public function __construct(Modeltags $modelo)
+    public function __construct(private Modeltags $modelo)
     {
         parent::__construct();
     }
 
-    public function acaoPadrao(?int $id = null): void
+    public function actionDefault(?int $id = null): void
     {
         $metodoHttp = $this->getHttpRequest()->getMethod();
 
@@ -24,7 +24,7 @@ final class TagsPresenter extends ApiPresenter
                     $this->buscarTags($id);
                     break;
                 case 'PUT':
-                    $this->atualizaTags($id);
+                    $this->autalizarTags($id);
                     break;
                 case 'DELETE':
                     $this->deletaTags($id);
@@ -37,7 +37,7 @@ final class TagsPresenter extends ApiPresenter
                     $this->listarTodos();
                     break;
                 case 'POST':
-                    $this->criaTags();
+                    $this->criarTags();
                 default:
                     $this->sendJson(['erro' => 'Método não permitido'], 405);
             }
@@ -46,7 +46,12 @@ final class TagsPresenter extends ApiPresenter
 
     private function listarTodos()
     {
-        $this->sendJson($this->modelo->listarTodos()->fetchAll);
+        $tags = $this->modelo->listarTags()->fetchAll();
+        $resultado = [];
+        foreach ($tags as $tag) {
+            $resultado[] = $tag->toArray();
+        }
+        $this->sendJson($resultado);
     }
 
     private function buscarTags(int $id): void
@@ -54,40 +59,40 @@ final class TagsPresenter extends ApiPresenter
         $tag = $this->modelo->buscarTags($id);
 
         if ($tag) {
-            $this->sendJson($tag);
+            $this->sendJson($tag->toArray());
         } else {
             $this->sendJson(['erro' => 'Tag não encontrada'], 404);
         }
     }
 
-    private function criaTags(): void
+    private function criarTags(): void
     {
         $dados = $this->getJsonBody();
-
         if (empty($dados['nome'])) {
-            throw new BadRequestException('Campo "nome" é obrigatório.', 400);
+            throw new BadRequestException('O campo "nome" é obrigatório.', 400);
         }
-
-        $novaTag = $this->modelo->criaTag($dados);
-        $this->sendJson($novaTag, 201); // criado
+        $novaTag = $this->modelo->criarTags($dados);
+        $this->sendJson($novaTag->toArray(), 201);
     }
 
-    private function atualizaTags(int $id): void
+    private function autalizarTags(int $id): void
     {
         if (!$this->modelo->buscarTags($id)) {
             $this->sendJson(['erro' => 'Tag não encontrada'], 404);
             return;
         }
         $dados = $this->getJsonBody();
-        $this->modelo->atualizaTags($id, $dados);
+        $this->modelo->autalizarTags($id, $dados);
         $this->sendJson($this->modelo->buscarTags($id));
     }
 
     private function deletaTags(int $id): void
     {
-        if(!$this->modelo->buscarTags($id)){
+       if (!$this->modelo->buscarTags($id)) {
             $this->sendJson(['erro' => 'Tag não encontrada'], 404);
             return;
         }
+        $this->modelo->deletaTag($id);
+        $this->sendJson(null, 204);
     }
 }

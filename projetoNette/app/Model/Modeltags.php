@@ -22,7 +22,7 @@ final class Modeltags
         return $this->database->table(self::NOME_TABELA);
     }
 
-    public function buscarTag(int $id): ?Nette\Database\Table\ActiveRow
+    public function buscarTags(int $id): ?Nette\Database\Table\ActiveRow
     {
         return $this->listarTags()->get($id);
     }
@@ -32,14 +32,14 @@ final class Modeltags
         return $this->database->table(self:: NOME_TABELA)->insert($dados);
     }
 
-    public function autalizaTag(int $id, array $dados): void
+    public function autalizarTags(int $id, array $dados): void
     {
-        $this->buscarTag($id)->update($dados);
+        $this->buscarTags($id)->update($dados);
     }
 
     public function deletaTag(int $id): void
     {
-        $this->buscarTag($id)->delete();
+        $this->buscarTags($id)->delete();
     }
 }
 
