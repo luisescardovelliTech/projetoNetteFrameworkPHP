@@ -43,7 +43,7 @@ final class PostsPresenter extends ApiPresenter
                     $this->listarTodos();
                     break;
                 case 'POST':
-                    $this->critaPosts();
+                    $this->criaPosts();
                     break;
                 default:
                     $this->sendJson(['erro' => 'Método não permitido'], 405);
@@ -67,9 +67,13 @@ final class PostsPresenter extends ApiPresenter
         }
     }
 
-    private function critaPosts(): void
+    private function criaPosts(): void
     {
         $dados = $this->getJsonBody();
+
+        $tagIds = $dados ?? [];
+
+        unset($dados['tags']);
 
         if (empty($dados['titulo'])) {
             throw new BadRequestException('O campo "titulo" é obrigatório.', 400);
@@ -81,7 +85,7 @@ final class PostsPresenter extends ApiPresenter
             throw new BadRequestException('O campo "categoria_idcategoria" (ID da categoria) é obrigatório.', 400);
         }
 
-        $novoPost = $this->modelo->critaPostsPost($dados);
+        $novoPost = $this->modelo->criaPostsPost($dados, $tagIds);
         $postCompleto = $this->modelo->buscarPost($novoPost->idposts);
         $this->sendJson($postCompleto, 201); // 201 Created
     }
@@ -94,7 +98,15 @@ final class PostsPresenter extends ApiPresenter
         }
 
         $dados = $this->getJsonBody();
-        $this->modelo->atualizaPost($id, $dados);
+
+        $tagIds =null;
+        if(array_key_exists('tags', $dados)){
+            $tagIds = $dados['tags'];
+        }
+
+        unset($dados['tags']);
+
+        $this->modelo->atualizaPost($id, $dados, $tagIds);
 
         $this->sendJson($this->modelo->buscarPost($id));
     }
