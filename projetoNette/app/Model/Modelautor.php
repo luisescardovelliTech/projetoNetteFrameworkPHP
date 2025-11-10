@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Model\Modelautor;
+namespace App\Model;
 
 use Nette;
 
@@ -35,7 +35,7 @@ final class Modelautor
         return $this->database->table(self::NOME_TABELA)->insert($dados);
     }
 
-    public function autualizaAutor(int $id, array $dados): void
+    public function atualizaAutor(int $id, array $dados): void
     {
         $this->buscarAutor($id)->update($dados);
     }

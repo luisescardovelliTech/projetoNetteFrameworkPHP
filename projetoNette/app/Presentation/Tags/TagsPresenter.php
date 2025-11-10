@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Tags;
+namespace App\Presentation\Tags;
 
 use Nette;
 use App\Core\ApiPresenter;
-use App\Model\Modeltags\Modeltags;
+use App\Model\Modeltags;
 use Nette\Application\BadRequestException;
 
 final class TagsPresenter extends ApiPresenter

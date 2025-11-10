@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Model\Modelcategoria;
+namespace App\Model;
 use Nette;
 
 final class Modelcategoria

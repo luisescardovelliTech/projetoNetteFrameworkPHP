@@ -6,5 +6,5 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Nette\\' => array($vendorDir . '/nette/caching/src', $vendorDir . '/nette/utils/src'),
+    'Nette\\' => array($vendorDir . '/nette/neon/src', $vendorDir . '/nette/caching/src', $vendorDir . '/nette/utils/src'),
 );

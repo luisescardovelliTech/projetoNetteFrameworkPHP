@@ -1,15 +1,6 @@
 services:
-	- App\Core\RouterFactory::createRouter
-    - App\Model\Modelautor
-    - App\Model\Modelcategoria
-    - App\Model\Modelposts
-    - App\Model\Modelotags
-
-
-search:
-	-	in: %appDir%
-		classes:
-			- *Facade
-			- *Factory
-			- *Repository
-			- *Service
+- App\Core\RouterFactory::createRouter
+- App\Model\Modelautor
+- App\Model\Modelcategoria
+- App\Model\Modelposts
+- App\Model\Modeltags

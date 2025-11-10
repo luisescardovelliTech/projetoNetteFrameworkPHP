@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Autor;
+namespace App\Presentation\Autor;
 
 use Nette;
 
-use App\Model\Modelautor\Modelautor;
+use App\Model\Modelautor;
 use App\Core\ApiPresenter;
 use Nette\Application\BadRequestException;
 
@@ -15,7 +15,7 @@ final class AutorPresenter extends ApiPresenter
         parent::__construct();
     }
 
-    public function acaoPadrao(?int $id = null): void
+    public function actionDefault(?int $id = null): void
     {
         $metodoHttp = $this->getHttpRequest()->getMethod();
 
@@ -38,7 +38,7 @@ final class AutorPresenter extends ApiPresenter
                     $this->listarTodos();
                     break;
                 case 'POST':
-                    $this->criaAutor();
+                    $this->criarAutor();
                 default:
                     $this->sendJson(['erro' => 'Método não permitido'], 405);
             }
@@ -46,22 +46,29 @@ final class AutorPresenter extends ApiPresenter
 
     }
 
-    private function listarTodos()
+    private function listarTodos(): void
     {
-        $this->sendJson($this->modelo->listarAutores()->fetchAll());
-    }
+        $autoresDb = $this->modelo->listarAutores()->fetchAll();
 
+        $resultado = [];
+
+        foreach ($autoresDb as $autor) {
+            $resultado[] = $autor->toArray();
+        }
+
+        $this->sendJson($resultado);
+    }
     private function buscarAutor(int $id): void
     {
         $autor = $this->modelo->buscarAutor($id);
         if ($autor){
-            $this->sendJson($autor);
+            $this->sendJson($autor->toArray());
         } else{
             $this->sendJson(['erro' => 'Autor não encontrado'], 404);
         }
     }
 
-    private function criaAutor(): void
+    private function criarAutor(): void
     {
         $dados = $this->getJsonBody();
 
@@ -69,8 +76,8 @@ final class AutorPresenter extends ApiPresenter
             throw new BadRequestException('Campos "nome" e "email" são obrigatórios.', 400);
         }
 
-        $novoAutor = $this->modelo->criaAutor($dados);
-        $this->sendJson($novoAutor, 201); // 201 criado
+        $novoAutor = $this->modelo->criarAutor($dados);
+        $this->sendJson($novoAutor->toArray(), 201); // 201 criado
     }
 
     private function atualizaAutor(int $id): void

@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Categoria;
+namespace App\Presentation\Categoria;
 
 use Nette;
-use App\Model\Modelcategoria\Modelcategoria;
+use App\Model\Modelcategoria;
 use App\Core\ApiPresenter;
 use Nette\Application\BadRequestException;
 

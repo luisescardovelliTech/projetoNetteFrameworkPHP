@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Posts;
+namespace App\Presentation\Posts;
 
 use Nette;
 use App\Model\Modelposts;

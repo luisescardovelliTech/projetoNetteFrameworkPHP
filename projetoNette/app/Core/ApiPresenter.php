@@ -7,59 +7,64 @@ namespace App\Core;
 use Nette;
 use Nette\Application\BadRequestException;
 use Nette\Application\Responses\JsonResponse;
+use Nette\Application\UI\Template;
+
 
 abstract class ApiPresenter extends Nette\Application\UI\Presenter
 {
     public function run(Nette\Application\Request $request): Nette\Application\Response
     {
+
         $httpResponse = $this->getHttpResponse();
-
-        $httpResponse->setHeader('Access-Control-Allow-Origin', '*');
-
+        $httpResponse->setHeader('Access-Control-Allow-Origin', 'http://localhost:8000'); // Ou '*' para testes
         $httpResponse->setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
-
         $httpResponse->setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+        $httpResponse->setHeader('Access-Control-Allow-Credentials', 'true');
 
         if ($this->getHttpRequest()->isMethod('OPTIONS')) {
-            $this->sendJson(null, 204); // Responde 204 (No Content) e termina
+            $this->sendJson(null, 204);
         }
         try {
             return parent::run($request);
-
         } catch (BadRequestException $e) {
-            // 400 - Erro do cliente
-            $this->getHttpResponse()->setCode($e->getCode());
+            $this->getHttpResponse()->setCode($e->getCode() ?: 400);
             return new JsonResponse(['erro' => $e->getMessage()]);
-
         } catch (Nette\Database\ForeignKeyConstraintViolationException $e) {
-            // 409 - Conflito
             $this->getHttpResponse()->setCode(409);
-            return new JsonResponse(['erro' => 'Conflito de dependência. O recurso está em uso.']);
-
+            return new JsonResponse(['erro' => 'Conflito de dependência.']);
         } catch (Nette\Database\UniqueConstraintViolationException $e) {
-            // 409 - Conflito
             $this->getHttpResponse()->setCode(409);
-            return new JsonResponse(['erro' => 'Conflito de dados. O recurso já existe.']);
-
+            return new JsonResponse(['erro' => 'Dado duplicado.']);
         } catch (\Exception $e) {
-
             $this->getHttpResponse()->setCode(500);
-            return new JsonResponse(['erro' => 'Erro interno do servidor', 'detalhe' => $e->getMessage()]);
+
+            return new JsonResponse(['erro' => 'Erro interno', 'detalhe' => $e->getMessage()]);
         }
+    }
+
+    public function sendTemplate(?Template $template = null): void
+    {
+
+    }
+    
+    protected function startup(): void
+    {
+        parent::startup();
+        // Desliga a Tracy para garantir que não "suja" o JSON
+        \Tracy\Debugger::$productionMode = true;
+
+        // ... (o resto do seu código startup, se houver)
     }
 
     protected function getJsonBody(): array
     {
         $corpo = $this->getHttpRequest()->getRawBody();
         $dados = json_decode($corpo, true);
-
         if (json_last_error() !== JSON_ERROR_NONE) {
-            // isso vai disparar o catch (BadRequestException $e) la de cima
-            throw new BadRequestException('JSON inválido no corpo da requisição.', 400);
+            throw new BadRequestException('JSON inválido.', 400);
         }
         return $dados;
     }
-
 
     public function sendJson($data, int $code = 200): void
     {

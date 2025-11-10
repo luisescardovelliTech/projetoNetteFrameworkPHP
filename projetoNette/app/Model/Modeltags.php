@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Model\Modeltags;
+namespace App\Model;
 
 use Nette;
 
