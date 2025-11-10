@@ -12,9 +12,11 @@ final class RouterFactory
 {
     use Nette\StaticClass;
 
-    public static function createRouter(): RouteList
+public static function createRouter(): RouteList
     {
         $router = new RouteList;
+
+        $router->addRoute('posts/upload', 'Posts:upload');
 
         $router->addRoute('<presenter autor|categoria|posts|tags>[/<id \d+>]', [
             'action' => 'default',

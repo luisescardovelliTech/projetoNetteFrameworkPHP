@@ -31,7 +31,7 @@ final class Modelposts
     }
 
 
-    public function buscarPost(int $id): ?Nette\Database\Table\ActiveRow
+    public function buscarPosts(int $id): ?Nette\Database\Table\ActiveRow
     {
         return $this->listarPosts()->get($id);
     }
@@ -42,15 +42,11 @@ final class Modelposts
             ->where(self::COLUNA_POST_ID_JUNCAO, $postId)
             ->delete();
 
-        if (!empty($tagIds)) {
-            $dadosJuncao = [];
-            foreach ($tagIds as $tagId) {
-                $dadosJuncao[] = [
-                    self::COLUNA_POST_ID_JUNCAO => $postId,
-                    self::COLUNA_TAG_ID_JUNCAO => $tagId
-                ];
-            }
-            $this->database->table(self::TABELA_JUNCAO_TAGS)->insert($dadosJuncao);
+        foreach ($tagIds as $tagId) {
+            $this->database->table(self::TABELA_JUNCAO_TAGS)->insert([
+                self::COLUNA_POST_ID_JUNCAO => $postId,
+                self::COLUNA_TAG_ID_JUNCAO  => $tagId
+            ]);
         }
     }
 
