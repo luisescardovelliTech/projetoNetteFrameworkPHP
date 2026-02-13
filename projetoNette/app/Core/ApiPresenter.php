@@ -23,7 +23,7 @@ abstract class ApiPresenter extends Nette\Application\UI\Presenter
         $httpResponse->setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
         if ($this->getHttpRequest()->isMethod('OPTIONS')) {
-            $this->sendJson(null, 204); // Responde 204 (No Content) e termina
+            $this->sendJson(null, 204); // Responde 204 
         }
         try {
             return parent::run($request);
@@ -53,10 +53,8 @@ abstract class ApiPresenter extends Nette\Application\UI\Presenter
     protected function startup(): void
     {
         parent::startup();
-        // Desliga a Tracy para garantir que não "suja" o JSON
         \Tracy\Debugger::$productionMode = true;
 
-        // ... (o resto do seu código startup, se houver)
     }
 
     protected function getJsonBody(): array

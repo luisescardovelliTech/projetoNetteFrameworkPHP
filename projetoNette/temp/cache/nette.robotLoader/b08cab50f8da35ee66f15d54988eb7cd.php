@@ -10,7 +10,7 @@ return array (
     'App\\Core\\ApiPresenter' => 
     array (
       0 => 'C:\\xampp\\htdocs\\projetoNette\\projetoNette\\app\\Core\\ApiPresenter.php',
-      1 => 1762735319,
+      1 => 1762813024,
     ),
     'App\\Core\\RouterFactory' => 
     array (
@@ -70,12 +70,12 @@ return array (
     'App\\Presentation\\Posts\\PostsPresenter' => 
     array (
       0 => 'C:\\xampp\\htdocs\\projetoNette\\projetoNette\\app\\Presentation\\Posts\\PostsPresenter.php',
-      1 => 1762740693,
+      1 => 1762741321,
     ),
     'App\\Presentation\\Tags\\TagsPresenter' => 
     array (
       0 => 'C:\\xampp\\htdocs\\projetoNette\\projetoNette\\app\\Presentation\\Tags\\TagsPresenter.php',
-      1 => 1762738598,
+      1 => 1762813505,
     ),
   ),
   1 => 
@@ -83,6 +83,7 @@ return array (
     'null' => 3,
     'App\\Presentation\\Tag\\TagPresenter' => 2,
     'App\\Presentation\\Categorias\\CategoriasPresenter' => 3,
+    'App\\Presentation\\Post\\PostPresenter' => 2,
   ),
   2 => 
   array (
